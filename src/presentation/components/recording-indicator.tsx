@@ -16,6 +16,8 @@ export function RecordingIndicator({ isRecording, isPaused }: Props) {
   const ringOpacityAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
+    const animations: Animated.CompositeAnimation[] = []
+
     if (isRecording && !isPaused) {
       const loopAnims = barAnims.map((anim, i) =>
         Animated.loop(
@@ -39,20 +41,24 @@ export function RecordingIndicator({ isRecording, isPaused }: Props) {
           Animated.timing(pulseAnim, { toValue: 1.0, duration: 850, useNativeDriver: true }),
         ])
       )
-      loopAnims.forEach((a) => a.start())
-      pulse.start()
-      Animated.timing(ringOpacityAnim, { toValue: 0.25, duration: 300, useNativeDriver: true }).start()
-      return () => {
-        loopAnims.forEach((a) => a.stop())
-        pulse.stop()
-      }
+      const ringIn = Animated.timing(ringOpacityAnim, { toValue: 0.25, duration: 300, useNativeDriver: true })
+
+      animations.push(...loopAnims, pulse, ringIn)
     } else {
-      barAnims.forEach((anim) =>
-        Animated.timing(anim, { toValue: 0.35, duration: 250, useNativeDriver: false }).start()
+      const barFreezes = barAnims.map((anim) =>
+        Animated.timing(anim, { toValue: 0.35, duration: 250, useNativeDriver: false })
       )
-      Animated.timing(pulseAnim, { toValue: 1.0, duration: 250, useNativeDriver: true }).start()
-      Animated.timing(ringOpacityAnim, { toValue: 0, duration: 250, useNativeDriver: true }).start()
+      const pulseReset = Animated.timing(pulseAnim, { toValue: 1.0, duration: 250, useNativeDriver: true })
+      const ringOut = Animated.timing(ringOpacityAnim, { toValue: 0, duration: 250, useNativeDriver: true })
+
+      animations.push(...barFreezes, pulseReset, ringOut)
     }
+
+    animations.forEach((a) => a.start())
+
+    return () => animations.forEach((a) => a.stop())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // barAnims, pulseAnim, ringOpacityAnim are stable Animated.Value refs — intentionally omitted
   }, [isRecording, isPaused])
 
   return (
