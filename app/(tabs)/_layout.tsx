@@ -1,59 +1,65 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
-
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { Tabs } from 'expo-router'
+import { Pressable, type ViewStyle } from 'react-native'
+import { Image } from 'expo-image'
+import { useRecordingsStore } from '../../src/store/recordings-store'
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const activeReviewId = useRecordingsStore((s) => s.activeReviewId)
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
-      }}>
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: '#091422',
+          borderTopColor: '#1A3A5C',
+          borderTopWidth: 1,
+        },
+        tabBarActiveTintColor: '#4A9EFF',
+        tabBarInactiveTintColor: '#6B8BAA',
+        tabBarLabelStyle: { fontSize: 10, letterSpacing: 1 },
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: 'SESSIONS',
+          tabBarIcon: ({ color }) => (
+            <Image source="sf:list.bullet" style={{ width: 22, height: 22, tintColor: color }} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="record"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'RECORD',
+          tabBarIcon: ({ color }) => (
+            <Image source="sf:mic" style={{ width: 22, height: 22, tintColor: color }} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="review"
+        options={{
+          title: 'REVIEW',
+          tabBarIcon: ({ color }) => (
+            <Image
+              source="sf:headphones"
+              style={{ width: 22, height: 22, tintColor: activeReviewId ? color : '#2E6DB4' }}
+            />
+          ),
+          tabBarButton: (props) =>
+            activeReviewId ? (
+              <Pressable {...(props as any)} />
+            ) : (
+              <Pressable
+                {...(props as any)}
+                disabled
+                style={[props.style as ViewStyle, { opacity: 0.4 }]}
+              />
+            ),
         }}
       />
     </Tabs>
-  );
+  )
 }
