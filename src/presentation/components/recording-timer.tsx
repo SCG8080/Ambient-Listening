@@ -18,7 +18,6 @@ export function RecordingTimer({ seconds, isRecording, isPaused }: Props) {
           color: labelColor,
           fontSize: 11,
           letterSpacing: 3,
-          fontFamily: 'SpaceMono',
         }}
       >
         {label}

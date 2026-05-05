@@ -13,6 +13,7 @@ export function RecordingIndicator({ isRecording, isPaused }: Props) {
     Array.from({ length: BAR_COUNT }, (_, i) => new Animated.Value(i % 2 === 0 ? 0.5 : 0.3))
   ).current
   const pulseAnim = useRef(new Animated.Value(1)).current
+  const ringOpacityAnim = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
     if (isRecording && !isPaused) {
@@ -40,6 +41,7 @@ export function RecordingIndicator({ isRecording, isPaused }: Props) {
       )
       loopAnims.forEach((a) => a.start())
       pulse.start()
+      Animated.timing(ringOpacityAnim, { toValue: 0.25, duration: 300, useNativeDriver: true }).start()
       return () => {
         loopAnims.forEach((a) => a.stop())
         pulse.stop()
@@ -49,10 +51,9 @@ export function RecordingIndicator({ isRecording, isPaused }: Props) {
         Animated.timing(anim, { toValue: 0.35, duration: 250, useNativeDriver: false }).start()
       )
       Animated.timing(pulseAnim, { toValue: 1.0, duration: 250, useNativeDriver: true }).start()
+      Animated.timing(ringOpacityAnim, { toValue: 0, duration: 250, useNativeDriver: true }).start()
     }
   }, [isRecording, isPaused])
-
-  const isActive = isRecording && !isPaused
 
   return (
     <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -64,7 +65,7 @@ export function RecordingIndicator({ isRecording, isPaused }: Props) {
           borderRadius: 65,
           backgroundColor: '#4A9EFF',
           transform: [{ scale: pulseAnim }],
-          opacity: isActive ? 0.25 : 0,
+          opacity: ringOpacityAnim,
         }}
       />
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, height: 44 }}>
