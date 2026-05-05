@@ -1,20 +1,23 @@
 {
   "expo": {
-    "name": "vitas-ambient-listening",
-    "slug": "vitas-ambient-listening",
+    "name": "VITAS Ambient Capture",
+    "slug": "vitas-ambient-capture",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "vitasambientlistening",
-    "userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "dark",
     "newArchEnabled": true,
     "splash": {
       "image": "./assets/images/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#0F1B2D"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "VITAS Ambient Capture requires microphone access to record patient sessions."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -22,7 +25,8 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": ["RECORD_AUDIO"]
     },
     "web": {
       "bundler": "metro",
@@ -31,7 +35,9 @@
     },
     "plugins": [
       "expo-router",
-      "expo-audio"
+      ["expo-audio", {
+        "microphonePermission": "VITAS Ambient Capture requires microphone access to record patient sessions."
+      }]
     ],
     "experiments": {
       "typedRoutes": true
