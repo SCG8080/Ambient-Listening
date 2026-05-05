@@ -94,13 +94,13 @@ export function useRecorder() {
     if (isTransitioning.current || !isRecording || !isPaused) return
     isTransitioning.current = true
     try {
-      // Re-request audio session — Android drops it when the app is backgrounded
-      await setAudioModeAsync({ playsInSilentMode: true, allowsRecording: true })
       await resumeRecording(service, storeResume, addPauseEvent)
       startTimer()
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
     } catch {
-      // recorder is in a bad state — nothing more we can do without losing audio
+      // Native recorder state was lost during backgrounding — recover UI so it isn't stuck
+      storeResume()
+      startTimer()
     } finally {
       isTransitioning.current = false
     }

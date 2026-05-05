@@ -1,5 +1,6 @@
 import { View, Text } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { setAudioModeAsync } from 'expo-audio'
 import { useRecorder } from '@/hooks/use-recorder'
 import { useAppState } from '@/hooks/use-app-state'
 import { useSessionStore } from '@/store/session-store'
@@ -12,11 +13,17 @@ export function RecordingScreen() {
   const { isRecording, isPaused, elapsedSeconds, start, pause, resume, stop } = useRecorder()
   const session = useSessionStore((s) => s.context)
 
-  useAppState(() => {
-    if (isRecording && !isPaused) {
-      pause()
-    }
-  })
+  useAppState(
+    () => {
+      if (isRecording && !isPaused) pause()
+    },
+    () => {
+      // Re-establish audio session on foreground return, before the user taps RESUME
+      if (isRecording) {
+        setAudioModeAsync({ playsInSilentMode: true, allowsRecording: true })
+      }
+    },
+  )
 
   return (
     <View style={{ flex: 1, backgroundColor: '#0F1B2D', paddingHorizontal: 24,
