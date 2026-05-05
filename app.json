@@ -26,7 +26,15 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "permissions": ["RECORD_AUDIO"]
+      "permissions": [
+        "RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS",
+        "RECORD_AUDIO",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ],
+      "package": "com.anonymous.vitasambientcapture"
     },
     "web": {
       "bundler": "metro",
@@ -35,9 +43,12 @@
     },
     "plugins": [
       "expo-router",
-      ["expo-audio", {
-        "microphonePermission": "VITAS Ambient Capture requires microphone access to record patient sessions."
-      }]
+      [
+        "expo-audio",
+        {
+          "microphonePermission": "VITAS Ambient Capture requires microphone access to record patient sessions."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
