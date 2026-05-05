@@ -5,15 +5,13 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*", "src/*"]
-    }
+    },
+    "types": ["jest"]
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
     ".expo/types/**/*.d.ts",
     "expo-env.d.ts"
-  ],
-  "exclude": [
-    "src/__tests__"
   ]
 }
