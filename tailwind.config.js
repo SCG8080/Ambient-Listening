@@ -2,6 +2,7 @@
 module.exports = {
   content: [
     "./app/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   presets: [require("nativewind/preset")],
@@ -23,6 +24,9 @@ module.exports = {
           secondary: "#A8C4E0",
           muted: "#6B8BAA",
         },
+      },
+      fontFamily: {
+        mono: ["SpaceMono", "monospace"],
       },
     },
   },

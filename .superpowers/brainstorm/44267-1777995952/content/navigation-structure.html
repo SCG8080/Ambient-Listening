@@ -1,0 +1,88 @@
+<h2>Navigation Structure</h2>
+<p class="subtitle">How should users move between the three main screens?</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0F1B2D; border-radius:8px; overflow:hidden; min-height:180px; display:flex; flex-direction:column;">
+      <!-- Screen area -->
+      <div style="flex:1; padding:16px; display:flex; flex-direction:column; gap:8px;">
+        <div style="color:#A8C4E0; font-size:10px; letter-spacing:1.5px;">RECORDINGS</div>
+        <div style="background:#1A3A5C; border-radius:6px; height:28px;"></div>
+        <div style="background:#1A3A5C; border-radius:6px; height:28px;"></div>
+        <div style="background:#1A3A5C; border-radius:6px; height:28px;"></div>
+      </div>
+      <!-- Tab bar -->
+      <div style="background:#091422; display:flex; border-top:1px solid #1E3A5A; padding:8px 0 4px;">
+        <div style="flex:1; text-align:center;">
+          <div style="width:14px;height:14px;border-radius:50%;border:2px solid #4A9EFF;margin:0 auto 2px;"></div>
+          <div style="color:#4A9EFF; font-size:9px;">List</div>
+        </div>
+        <div style="flex:1; text-align:center;">
+          <div style="width:14px;height:14px;border-radius:50%;background:#4A9EFF;margin:0 auto 2px;"></div>
+          <div style="color:#6B8BAA; font-size:9px;">Record</div>
+        </div>
+        <div style="flex:1; text-align:center;">
+          <div style="width:14px;height:14px;background:#1A3A5C;border-radius:3px;margin:0 auto 2px;"></div>
+          <div style="color:#6B8BAA; font-size:9px;">Review</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Bottom Tab Bar</h3>
+      <p>List · Record · Review always accessible via tabs. Simple mental model, fast switching. Review tab activates only after a recording stops.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0F1B2D; border-radius:8px; overflow:hidden; min-height:180px; display:flex; flex-direction:column; padding:16px; gap:10px;">
+      <!-- List screen with FAB -->
+      <div style="color:#A8C4E0; font-size:10px; letter-spacing:1.5px;">RECORDINGS</div>
+      <div style="background:#1A3A5C; border-radius:6px; height:24px;"></div>
+      <div style="background:#1A3A5C; border-radius:6px; height:24px;"></div>
+      <!-- Arrow flow -->
+      <div style="display:flex; align-items:center; gap:8px; margin:4px 0;">
+        <div style="background:#4A9EFF; border-radius:50%; width:32px; height:32px; display:flex; align-items:center; justify-content:center;">
+          <span style="color:#fff; font-size:16px; line-height:1;">+</span>
+        </div>
+        <div style="color:#4A9EFF; font-size:14px;">→</div>
+        <div style="background:#1A3A5C; border-radius:6px; flex:1; height:32px; display:flex; align-items:center; padding-left:8px;">
+          <span style="color:#6B8BAA; font-size:10px;">Recording screen</span>
+        </div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <div style="color:#4A9EFF; font-size:10px; margin-left:40px;">STOP →</div>
+        <div style="background:#1A3A5C; border-radius:6px; flex:1; height:32px; display:flex; align-items:center; padding-left:8px;">
+          <span style="color:#6B8BAA; font-size:10px;">Review screen</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Stack Navigation (FAB)</h3>
+      <p>List is home. Tap FAB (+) to push Recording screen. Stop auto-pushes Review screen. Back button returns to list. Linear, focused flow.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#0F1B2D; border-radius:8px; overflow:hidden; min-height:180px; display:flex; flex-direction:column; padding:16px; gap:10px;">
+      <!-- Single screen with modal overlay -->
+      <div style="color:#A8C4E0; font-size:10px; letter-spacing:1.5px;">RECORDINGS</div>
+      <div style="background:#1A3A5C; border-radius:6px; height:24px;"></div>
+      <div style="background:#1A3A5C; border-radius:6px; height:24px;"></div>
+      <!-- Modal overlay -->
+      <div style="background:#0D2540; border:1px solid #2E5A8A; border-radius:8px; padding:8px; margin-top:4px;">
+        <div style="color:#A8C4E0; font-size:9px; letter-spacing:1.5px; margin-bottom:6px;">▲ RECORDING SHEET</div>
+        <div style="color:#E8F4FF; font-size:20px; font-weight:300; font-family:monospace;">01:23</div>
+        <div style="display:flex; gap:6px; margin-top:6px;">
+          <div style="flex:1; background:#1A3A5C; border-radius:5px; height:20px;"></div>
+          <div style="flex:1; background:#4A9EFF; border-radius:5px; height:20px;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Modal Bottom Sheet</h3>
+      <p>List stays in background. Recording controls slide up as a modal sheet. Review screen also a modal. No navigation hierarchy — context is always visible.</p>
+    </div>
+  </div>
+
+</div>
