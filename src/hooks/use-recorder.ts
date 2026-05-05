@@ -109,7 +109,13 @@ export function useRecorder() {
       stopTimer()
       const currentPauseEvents = useRecordingStore.getState().pauseEvents
       const currentContext = useSessionStore.getState().context
-      const id = await stopRecording(service, recordingRepository, currentContext, currentPauseEvents)
+      let id: string
+      try {
+        id = await stopRecording(service, recordingRepository, currentContext, currentPauseEvents)
+      } catch {
+        storeReset()
+        return
+      }
       storeReset()
       setActiveReview(id)
       await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
