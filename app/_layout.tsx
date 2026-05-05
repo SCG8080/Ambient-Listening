@@ -4,6 +4,7 @@ import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import { ThemeProvider, DarkTheme, type Theme } from '@react-navigation/native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 
 SplashScreen.preventAutoHideAsync()
 
@@ -42,11 +43,13 @@ export default function RootLayout() {
   if (!loaded) return null
 
   return (
-    <ThemeProvider value={NavyTheme}>
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0F1B2D' } }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider value={NavyTheme}>
+        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: '#0F1B2D' } }}>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="+not-found" />
+        </Stack>
+      </ThemeProvider>
+    </SafeAreaProvider>
   )
 }

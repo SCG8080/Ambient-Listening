@@ -1,5 +1,6 @@
 import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native'
 import { Image } from 'expo-image'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { usePlayback } from '@/hooks/use-playback'
 import { uploadRecording } from '@/domain/usecases/uploadRecording'
 import { recordingRepository, uploadService } from '@/data/repositories/recording-repository-instance'
@@ -8,6 +9,7 @@ import { PauseTimeline } from '@/presentation/components/pause-timeline'
 import { formatTime } from '@/utils/formatTime'
 
 export function ReviewScreen() {
+  const insets = useSafeAreaInsets()
   const { recording, isPlaying, play, pause } = usePlayback()
 
   if (!recording) {
@@ -42,9 +44,8 @@ export function ReviewScreen() {
 
   return (
     <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
       style={{ flex: 1, backgroundColor: '#0F1B2D' }}
-      contentContainerStyle={{ padding: 20, gap: 16, paddingBottom: 40 }}
+      contentContainerStyle={{ padding: 20, gap: 16, paddingTop: insets.top + 12, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
     >
       <Text style={{ color: '#E8F4FF', fontSize: 28, fontWeight: '300', letterSpacing: 1, marginBottom: 4 }}>

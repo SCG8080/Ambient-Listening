@@ -1,4 +1,5 @@
 import { View, Text } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRecorder } from '@/hooks/use-recorder'
 import { useAppState } from '@/hooks/use-app-state'
 import { useSessionStore } from '@/store/session-store'
@@ -7,6 +8,7 @@ import { RecordingTimer } from '@/presentation/components/recording-timer'
 import { RecordingControls } from '@/presentation/components/recording-controls'
 
 export function RecordingScreen() {
+  const insets = useSafeAreaInsets()
   const { isRecording, isPaused, elapsedSeconds, start, pause, resume, stop } = useRecorder()
   const session = useSessionStore((s) => s.context)
 
@@ -20,7 +22,7 @@ export function RecordingScreen() {
     <View style={{ flex: 1, backgroundColor: '#0F1B2D', paddingHorizontal: 24,
       justifyContent: 'space-between', paddingBottom: 32 }}>
       {/* Session header */}
-      <View style={{ paddingTop: 24, gap: 10 }}>
+      <View style={{ paddingTop: insets.top + 12, gap: 10 }}>
         <Text style={{ color: '#E8F4FF', fontSize: 22, fontWeight: '300', letterSpacing: 0.5 }}>
           {session.patientName}
         </Text>

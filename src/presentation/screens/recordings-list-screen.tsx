@@ -1,11 +1,13 @@
 import { View, Text, ScrollView, Pressable } from 'react-native'
 import { router } from 'expo-router'
 import { Image } from 'expo-image'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRecordingsStore } from '@/store/recordings-store'
 import { useRecordingStore } from '@/store/recording-store'
 import { RecordingListItem } from '@/presentation/components/recording-list-item'
 
 export function RecordingsListScreen() {
+  const insets = useSafeAreaInsets()
   const recordings = useRecordingsStore((s) => s.recordings)
   const setActiveReview = useRecordingsStore((s) => s.setActiveReview)
   const isRecording = useRecordingStore((s) => s.isRecording)
@@ -19,7 +21,7 @@ export function RecordingsListScreen() {
   return (
     <View style={{ flex: 1, backgroundColor: '#0F1B2D', paddingHorizontal: 20 }}>
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-        paddingTop: 20, paddingBottom: 20 }}>
+        paddingTop: insets.top + 12, paddingBottom: 20 }}>
         <View>
           <Text style={{ color: '#E8F4FF', fontSize: 28, fontWeight: '300', letterSpacing: 1 }}>
             Recordings

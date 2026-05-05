@@ -63,7 +63,10 @@
       "Bash(curl -s http://localhost:8081/)",
       "Bash(curl -s http://localhost:8081/status)",
       "Bash(/home/sandy/Android/Sdk/platform-tools/adb logcat *)",
-      "Bash(/home/sandy/Android/Sdk/platform-tools/adb exec-out *)"
+      "Bash(/home/sandy/Android/Sdk/platform-tools/adb exec-out *)",
+      "Bash(mkdir -p android/app/src/main/assets)",
+      "Bash(npx react-native *)",
+      "Bash(./gradlew assembleDebug)"
     ]
   }
 }
