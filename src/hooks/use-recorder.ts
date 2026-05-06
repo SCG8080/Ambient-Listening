@@ -1,9 +1,9 @@
 // src/hooks/use-recorder.ts
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { Alert, Linking } from 'react-native'
 import { router } from 'expo-router'
 import * as Haptics from 'expo-haptics'
-import { useAudioRecorder, RecordingPresets, setAudioModeAsync } from 'expo-audio'
+import { useAudioRecorder, RecordingPresets, setAudioModeAsync, useAudioRecorderState } from 'expo-audio'
 import { useRecordingStore } from '../store/recording-store'
 import { useRecordingsStore } from '../store/recordings-store'
 import { useSessionStore } from '../store/session-store'
@@ -20,7 +20,11 @@ export function useRecorder() {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   // expo-audio hook — returns a stable AudioRecorder instance
-  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY)
+  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY, (status) => {
+    if (status.hasError) {
+      console.warn('Audio recorder error:', status.error)
+    }
+  })
   // Wrap in adapter once, using a ref so we don't recreate on every render
   const serviceRef = useRef<AudioRecorderAdapter | null>(null)
   if (!serviceRef.current) {
@@ -39,6 +43,20 @@ export function useRecorder() {
   const addPauseEvent = useRecordingStore((s) => s.addPauseEvent)
   const setActiveReview = useRecordingsStore((s) => s.setActiveReview)
 
+  const recorderState = useAudioRecorderState(audioRecorder)
+
+  // Sync store state with native recorder state (handles external interruptions like phone calls)
+  useEffect(() => {
+    const shouldBeRecording = isRecording && !isPaused
+    const actuallyRecording = recorderState.isRecording
+
+    if (shouldBeRecording && !actuallyRecording && !isTransitioning.current) {
+      // The native recorder stopped (likely due to a system interruption).
+      // We must sync our store so the UI doesn't show a running timer.
+      pause()
+    }
+  }, [recorderState.isRecording, isRecording, isPaused, pause])
+
   const startTimer = () => {
     timerRef.current = setInterval(() => {
       setElapsed(useRecordingStore.getState().elapsedSeconds + 1)
@@ -56,7 +74,12 @@ export function useRecorder() {
     if (isTransitioning.current || isRecording) return
     isTransitioning.current = true
     try {
-      await setAudioModeAsync({ playsInSilentMode: true, allowsRecording: true })
+      await setAudioModeAsync({
+        playsInSilentMode: true,
+        allowsRecording: true,
+        interruptionMode: 'doNotMix',
+        allowsBackgroundRecording: false,
+      })
       const result = await startRecording(service, storeStart, requestMicrophonePermission)
       if (!result.success) {
         if (result.error === 'permission_denied') {

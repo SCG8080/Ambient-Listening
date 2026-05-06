@@ -11,7 +11,7 @@ export function useAppState(onBackground: () => void, onForeground?: () => void)
 
   useEffect(() => {
     const subscription = AppState.addEventListener('change', (nextState) => {
-      if (appStateRef.current === 'active' && nextState === 'background') {
+      if (appStateRef.current === 'active' && (nextState === 'background' || nextState === 'inactive')) {
         bgRef.current()
       } else if (appStateRef.current !== 'active' && nextState === 'active') {
         fgRef.current?.()
