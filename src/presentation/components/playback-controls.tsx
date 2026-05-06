@@ -1,6 +1,7 @@
-import { View, Text, Pressable } from 'react-native'
+import { View, Text } from 'react-native'
 import { Image } from 'expo-image'
 import { formatTime } from '@/utils/formatTime'
+import { Button } from './ui/button'
 
 interface PlaybackControlsProps {
   isPlaying: boolean
@@ -11,26 +12,19 @@ interface PlaybackControlsProps {
 
 export function PlaybackControls({ isPlaying, durationSeconds, onPlay, onPause }: PlaybackControlsProps) {
   return (
-    <View style={{ gap: 12, alignItems: 'center' }}>
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-        <Image source="sf:clock" style={{ width: 14, height: 14, tintColor: '#6B8BAA' }} />
-        <Text style={{ color: '#A8C4E0', fontSize: 13, fontFamily: 'SpaceMono' }}>
+    <View className="gap-3 items-center">
+      <View className="flex-row items-center gap-1.5">
+        <Image source="sf:clock" style={{ width: 14, height: 14, tintColor: '#94A3B8' }} />
+        <Text className="text-clinical-secondary text-sm font-mono">
           {formatTime(durationSeconds)}
         </Text>
       </View>
-      <Pressable
-        style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#4A9EFF',
-          borderRadius: 14, paddingVertical: 16, paddingHorizontal: 36, gap: 10 }}
+      <Button
+        label={isPlaying ? 'PAUSE' : 'PLAY'}
+        icon={isPlaying ? 'sf:pause.fill' : 'sf:play.fill'}
         onPress={isPlaying ? onPause : onPlay}
-      >
-        <Image
-          source={isPlaying ? 'sf:pause.fill' : 'sf:play.fill'}
-          style={{ width: 26, height: 26, tintColor: '#0F1B2D' }}
-        />
-        <Text style={{ color: '#0F1B2D', fontSize: 13, letterSpacing: 2, fontWeight: '700' }}>
-          {isPlaying ? 'PAUSE' : 'PLAY'}
-        </Text>
-      </Pressable>
+        className="px-10"
+      />
     </View>
   )
 }

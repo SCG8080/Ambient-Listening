@@ -7,6 +7,7 @@ import { useSessionStore } from '@/store/session-store'
 import { RecordingIndicator } from '@/presentation/components/recording-indicator'
 import { RecordingTimer } from '@/presentation/components/recording-timer'
 import { RecordingControls } from '@/presentation/components/recording-controls'
+import { Badge } from '../components/ui/badge'
 
 export function RecordingScreen() {
   const insets = useSafeAreaInsets()
@@ -26,31 +27,22 @@ export function RecordingScreen() {
   )
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#0F1B2D', paddingHorizontal: 24,
-      justifyContent: 'space-between', paddingBottom: 32 }}>
+    <View 
+      className="flex-1 bg-background px-6 justify-between pb-8"
+    >
       {/* Session header */}
-      <View style={{ paddingTop: insets.top + 12, gap: 10 }}>
-        <Text style={{ color: '#E8F4FF', fontSize: 22, fontWeight: '300', letterSpacing: 0.5 }}>
+      <View style={{ paddingTop: insets.top + 12 }} className="gap-2.5">
+        <Text className="text-clinical-text text-2xl font-light tracking-wide">
           {session.patientName}
         </Text>
-        <View style={{ flexDirection: 'row', gap: 8 }}>
-          <View style={{ backgroundColor: '#1A3A5C', borderRadius: 8, paddingHorizontal: 12,
-            paddingVertical: 5, borderWidth: 1, borderColor: '#2E6DB4' }}>
-            <Text style={{ color: '#A8C4E0', fontSize: 12, letterSpacing: 1 }}>
-              Team {session.teamCode}
-            </Text>
-          </View>
-          <View style={{ backgroundColor: '#1A3A5C', borderRadius: 8, paddingHorizontal: 12,
-            paddingVertical: 5, borderWidth: 1, borderColor: '#2E6DB4' }}>
-            <Text style={{ color: '#A8C4E0', fontSize: 12, letterSpacing: 1 }}>
-              Program {session.programCode}
-            </Text>
-          </View>
+        <View className="flex-row gap-2">
+          <Badge label={`Team ${session.teamCode}`} />
+          <Badge label={`Program ${session.programCode}`} />
         </View>
       </View>
 
       {/* Indicator */}
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', gap: 32 }}>
+      <View className="flex-1 items-center justify-center gap-8">
         <RecordingIndicator isRecording={isRecording} isPaused={isPaused} />
         <RecordingTimer seconds={elapsedSeconds} isRecording={isRecording} isPaused={isPaused} />
       </View>

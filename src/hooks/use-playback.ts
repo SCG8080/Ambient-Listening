@@ -24,11 +24,25 @@ export function usePlayback() {
     })
   }, [])
 
-  const play = () => {
+  const play = async () => {
     if (!recording) return
-    // If the player is at the end, reset to beginning so it can play again
-    if (status.currentTime >= status.duration) {
-      player.seekTo(0)
+    
+    // Defensive: Ensure audio is routed to speaker and recording mode is disabled 
+    // every time playback starts. This addresses intermittent earpiece routing on iOS.
+    try {
+      await setAudioModeAsync({
+        allowsRecording: false,
+        playsInSilentMode: true,
+        interruptionMode: 'doNotMix',
+        shouldRouteThroughEarpiece: false,
+      })
+    } catch (e) {
+      console.warn('Failed to set audio mode:', e)
+    }
+
+    // If the player is at the end (or very close to it), reset to beginning
+    if (status.duration > 0 && status.currentTime >= status.duration - 0.1) {
+      await player.seekTo(0)
     }
     player.play()
   }

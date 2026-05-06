@@ -1,4 +1,4 @@
-import { View, Text, Pressable, ScrollView, ActivityIndicator } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import { Image } from 'expo-image'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { usePlayback } from '@/hooks/use-playback'
@@ -7,6 +7,8 @@ import { recordingRepository, uploadService } from '@/data/repositories/recordin
 import { PlaybackControls } from '@/presentation/components/playback-controls'
 import { PauseTimeline } from '@/presentation/components/pause-timeline'
 import { formatTime } from '@/utils/formatTime'
+import { Card } from '../components/ui/card'
+import { Button } from '../components/ui/button'
 
 export function ReviewScreen() {
   const insets = useSafeAreaInsets()
@@ -14,11 +16,10 @@ export function ReviewScreen() {
 
   if (!recording) {
     return (
-      <View style={{ flex: 1, backgroundColor: '#0F1B2D', alignItems: 'center',
-        justifyContent: 'center', gap: 12 }}>
-        <Image source="sf:headphones" style={{ width: 56, height: 56, tintColor: '#2E6DB4' }} />
-        <Text style={{ color: '#A8C4E0', fontSize: 18, fontWeight: '300' }}>No recording to review</Text>
-        <Text style={{ color: '#6B8BAA', fontSize: 13 }}>Stop a recording to review it here</Text>
+      <View className="flex-1 bg-background items-center justify-center gap-3">
+        <Image source="sf:headphones" style={{ width: 56, height: 56, tintColor: '#CBD5E1' }} />
+        <Text className="text-clinical-secondary text-lg font-light">No recording to review</Text>
+        <Text className="text-clinical-muted text-sm">Stop a recording to review it here</Text>
       </View>
     )
   }
@@ -44,73 +45,59 @@ export function ReviewScreen() {
 
   return (
     <ScrollView
-      style={{ flex: 1, backgroundColor: '#0F1B2D' }}
+      className="flex-1 bg-background"
       contentContainerStyle={{ padding: 20, gap: 16, paddingTop: insets.top + 12, paddingBottom: 40 }}
       showsVerticalScrollIndicator={false}
     >
-      <Text style={{ color: '#E8F4FF', fontSize: 28, fontWeight: '300', letterSpacing: 1, marginBottom: 4 }}>
+      <Text className="text-clinical-text text-3xl font-light tracking-wide mb-1">
         Review
       </Text>
 
       {/* Session card */}
-      <View style={{ backgroundColor: '#1A3A5C', borderRadius: 14, padding: 20, gap: 12,
-        borderWidth: 1, borderColor: '#2E5A8A' }}>
-        <Text style={{ color: '#6B8BAA', fontSize: 11, letterSpacing: 2 }}>SESSION</Text>
-        <Text style={{ color: '#E8F4FF', fontSize: 20, fontWeight: '300' }}>
+      <Card className="gap-3">
+        <Text className="text-clinical-muted text-xs tracking-widest">SESSION</Text>
+        <Text className="text-clinical-text text-xl font-light">
           {recording.session.patientName}
         </Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
-          <Text style={{ color: '#A8C4E0', fontSize: 13 }}>Team {recording.session.teamCode}</Text>
-          <Text style={{ color: '#6B8BAA', fontSize: 13 }}>·</Text>
-          <Text style={{ color: '#A8C4E0', fontSize: 13 }}>Program {recording.session.programCode}</Text>
-          <Text style={{ color: '#6B8BAA', fontSize: 13 }}>·</Text>
-          <Text style={{ color: '#A8C4E0', fontSize: 13 }}>{formatTime(recording.durationSeconds)}</Text>
+        <View className="flex-row items-center gap-1.5">
+          <Text className="text-clinical-secondary text-sm">Team {recording.session.teamCode}</Text>
+          <Text className="text-clinical-muted text-sm">·</Text>
+          <Text className="text-clinical-secondary text-sm">Program {recording.session.programCode}</Text>
+          <Text className="text-clinical-muted text-sm">·</Text>
+          <Text className="text-clinical-secondary text-sm">{formatTime(recording.durationSeconds)}</Text>
         </View>
-      </View>
+      </Card>
 
       {/* Playback card */}
-      <View style={{ backgroundColor: '#1A3A5C', borderRadius: 14, padding: 20, gap: 12,
-        borderWidth: 1, borderColor: '#2E5A8A' }}>
-        <Text style={{ color: '#6B8BAA', fontSize: 11, letterSpacing: 2 }}>PLAYBACK</Text>
+      <Card className="gap-3">
+        <Text className="text-clinical-muted text-xs tracking-widest">PLAYBACK</Text>
         <PlaybackControls
           isPlaying={isPlaying}
           durationSeconds={recording.durationSeconds}
           onPlay={play}
           onPause={pause}
         />
-      </View>
+      </Card>
 
       {/* Timeline card (only if pause events exist) */}
       {recording.pauseEvents.length > 0 && (
-        <View style={{ backgroundColor: '#1A3A5C', borderRadius: 14, padding: 20,
-          borderWidth: 1, borderColor: '#2E5A8A' }}>
+        <Card>
           <PauseTimeline
             pauseEvents={recording.pauseEvents}
             durationSeconds={recording.durationSeconds}
           />
-        </View>
+        </Card>
       )}
 
       {/* Upload button */}
-      <Pressable
-        style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-          backgroundColor: isDone ? '#34D399' : '#4A9EFF',
-          borderRadius: 14, paddingVertical: 18, gap: 10, marginTop: 8 }}
+      <Button
+        label={uploadLabel as string}
+        icon={isDone ? 'sf:checkmark.circle.fill' : 'sf:icloud.and.arrow.up'}
+        variant={isDone ? 'success' : 'primary'}
         onPress={handleUpload}
         disabled={isUploading || isDone}
-      >
-        {isUploading ? (
-          <ActivityIndicator color="#0F1B2D" size="small" />
-        ) : (
-          <Image
-            source={isDone ? 'sf:checkmark.circle.fill' : 'sf:icloud.and.arrow.up'}
-            style={{ width: 20, height: 20, tintColor: '#0F1B2D' }}
-          />
-        )}
-        <Text style={{ color: '#0F1B2D', fontSize: 13, letterSpacing: 2, fontWeight: '700' }}>
-          {uploadLabel}
-        </Text>
-      </Pressable>
+        className="mt-2 py-4"
+      />
     </ScrollView>
   )
 }

@@ -2,12 +2,13 @@ import { Pressable, View, Text } from 'react-native'
 import { Image } from 'expo-image'
 import type { Recording } from '@/domain/entities/Recording'
 import { formatTime } from '@/utils/formatTime'
+import { Badge } from './ui/badge'
 
 const STATUS_CONFIG = {
-  draft: { label: 'DRAFT', color: '#6B8BAA', bg: '#1A3A5C' },
-  uploading: { label: 'UPLOADING', color: '#4A9EFF', bg: '#1A3A5C' },
-  uploaded: { label: 'UPLOADED', color: '#34D399', bg: '#0D3320' },
-  error: { label: 'ERROR', color: '#F87171', bg: '#3B0D0D' },
+  draft: { label: 'DRAFT', variant: 'default' as const },
+  uploading: { label: 'UPLOADING', variant: 'outline' as const },
+  uploaded: { label: 'UPLOADED', variant: 'success' as const },
+  error: { label: 'ERROR', variant: 'error' as const },
 }
 
 interface RecordingListItemProps {
@@ -24,35 +25,29 @@ export function RecordingListItem({ recording, onPress }: RecordingListItemProps
 
   return (
     <Pressable
-      style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-        backgroundColor: '#1A3A5C', borderRadius: 12, padding: 16, marginBottom: 10 }}
+      className="flex-row items-center justify-between bg-card rounded-2xl p-4 shadow-sm border border-border"
       onPress={onPress}
     >
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 12 }}>
-        <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#0F1B2D',
-          alignItems: 'center', justifyContent: 'center' }}>
-          <Image source="sf:mic" style={{ width: 20, height: 20, tintColor: '#4A9EFF' }} />
+      <View className="flex-row items-center gap-3">
+        <View className="w-10 h-10 rounded-full bg-background items-center justify-center">
+          <Image source="sf:mic" style={{ width: 20, height: 20, tintColor: '#2563EB' }} />
         </View>
-        <View style={{ gap: 2 }}>
-          <Text style={{ color: '#E8F4FF', fontSize: 18, fontWeight: '300', fontFamily: 'SpaceMono' }}>
+        <View className="gap-1">
+          <Text className="text-clinical-text text-lg font-light font-mono">
             {formatTime(recording.durationSeconds)}
           </Text>
-          <Text style={{ color: '#6B8BAA', fontSize: 11 }}>{date}</Text>
+          <Text className="text-clinical-muted text-xs">{date}</Text>
         </View>
       </View>
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+      <View className="flex-row items-center gap-2.5">
         {pauseCount > 0 && (
-          <Text style={{ color: '#6B8BAA', fontSize: 11 }}>
+          <Text className="text-clinical-muted text-xs">
             {pauseCount} pause{pauseCount > 1 ? 's' : ''}
           </Text>
         )}
-        <View style={{ borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3, backgroundColor: status.bg }}>
-          <Text style={{ fontSize: 10, letterSpacing: 1, fontWeight: '600', color: status.color }}>
-            {status.label}
-          </Text>
-        </View>
-        <Image source="sf:chevron.right" style={{ width: 16, height: 16, tintColor: '#6B8BAA' }} />
+        <Badge label={status.label} variant={status.variant} />
+        <Image source="sf:chevron.right" style={{ width: 16, height: 16, tintColor: '#94A3B8' }} />
       </View>
     </Pressable>
   )

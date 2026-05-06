@@ -1,5 +1,5 @@
-import { View, Text, Pressable } from 'react-native'
-import { Image } from 'expo-image'
+import { View } from 'react-native'
+import { Button } from './ui/button'
 
 interface RecordingControlsProps {
   isRecording: boolean
@@ -20,94 +20,44 @@ export function RecordingControls({
 }: RecordingControlsProps) {
   if (!isRecording) {
     return (
-      <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-        <Pressable
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#1A3A5C',
-            borderRadius: 14,
-            paddingVertical: 18,
-            gap: 10,
-            borderWidth: 1,
-            borderColor: '#2E6DB4',
-          }}
+      <View className="flex-row items-center">
+        <Button
+          label="START RECORDING"
+          icon="sf:mic.fill"
+          variant="outline"
           onPress={onStart}
-        >
-          <Image source="sf:mic.fill" style={{ width: 28, height: 28, tintColor: '#E8F4FF' }} />
-          <Text style={{ color: '#E8F4FF', fontSize: 12, letterSpacing: 2, fontWeight: '600' }}>
-            START RECORDING
-          </Text>
-        </Pressable>
+          className="flex-1 py-4"
+        />
       </View>
     )
   }
 
   return (
-    <View style={{ flexDirection: 'row', gap: 16, alignItems: 'center' }}>
-      <Pressable
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#1A3A5C',
-          borderRadius: 14,
-          paddingVertical: 18,
-          paddingHorizontal: 24,
-          gap: 8,
-          borderWidth: 1,
-          borderColor: '#1E3A5A',
-        }}
+    <View className="flex-row gap-4 items-center">
+      <Button
+        label="STOP"
+        icon="sf:stop.fill"
+        variant="outline"
         onPress={onStop}
-      >
-        <Image source="sf:stop.fill" style={{ width: 22, height: 22, tintColor: '#A8C4E0' }} />
-        <Text style={{ color: '#A8C4E0', fontSize: 12, letterSpacing: 2, fontWeight: '600' }}>
-          STOP
-        </Text>
-      </Pressable>
+        className="py-4"
+      />
 
       {isPaused ? (
-        <Pressable
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#1A3A5C',
-            borderRadius: 14,
-            paddingVertical: 18,
-            gap: 10,
-            borderWidth: 1,
-            borderColor: '#2E6DB4',
-          }}
+        <Button
+          label="RESUME"
+          icon="sf:play.fill"
+          variant="outline"
           onPress={onResume}
-        >
-          <Image source="sf:play.fill" style={{ width: 28, height: 28, tintColor: '#E8F4FF' }} />
-          <Text style={{ color: '#E8F4FF', fontSize: 12, letterSpacing: 2, fontWeight: '600' }}>
-            RESUME
-          </Text>
-        </Pressable>
+          className="flex-1 py-4"
+        />
       ) : (
-        <Pressable
-          style={{
-            flex: 1,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#4A9EFF',
-            borderRadius: 14,
-            paddingVertical: 18,
-            gap: 10,
-          }}
+        <Button
+          label="PAUSE"
+          icon="sf:pause.fill"
+          variant="primary"
           onPress={onPause}
-        >
-          <Image source="sf:pause.fill" style={{ width: 28, height: 28, tintColor: '#0F1B2D' }} />
-          <Text style={{ color: '#0F1B2D', fontSize: 12, letterSpacing: 2, fontWeight: '600' }}>
-            PAUSE
-          </Text>
-        </Pressable>
+          className="flex-1 py-4"
+        />
       )}
     </View>
   )
